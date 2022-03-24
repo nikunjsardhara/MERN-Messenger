@@ -2,20 +2,15 @@ import React from 'react'
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
+import { Link } from 'react-router-dom';
 
 const schema = yup.object({
-    displayname: yup.string().required("Display Name is required"),
     email: yup.string().email("Email must be a valid email").required("Email is required"),
     password: yup.string().required("Password is required").min(4, "Password must be at 4 characters long").test('passwordStrength', 'Password must contain at least one Uppercase letter, Special character, Number', (value) => {
         return [/[a-z]/, /[A-Z]/, /[0-9]/, /[^a-zA-Z0-9]/].every((pattern) =>
             pattern.test(value)
         )
-    }),
-    confirmpassword: yup.string().required("Confirm password is required").min(4, "Confirm password must be at 4 characters long").test('passwordStrength', 'Password must contain at least one Uppercase letter, Special character, Number', (value) => {
-        return [/[a-z]/, /[A-Z]/, /[0-9]/, /[^a-zA-Z0-9]/].every((pattern) =>
-            pattern.test(value)
-        )
-    }).oneOf([yup.ref('password')], "Password and confirm password should match"),
+    })
 }).required();
 
 const SigninForm = () => {
@@ -71,7 +66,7 @@ const SigninForm = () => {
                     Sign in
                 </button>
             </div>
-
+            If you don't already have an account <Link to="/signup">Sign up here</Link>
         </form>
     )
 }
