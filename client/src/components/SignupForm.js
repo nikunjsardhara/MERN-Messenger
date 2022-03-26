@@ -20,11 +20,34 @@ const schema = yup.object({
 }).required();
 
 const SignupForm = () => {
-    const onSubmit = data => console.log(data);
+    const onSubmit = (data) => {
+        if (!loader) {
+            setLoader(true);
+            signUp(formData, (res) => {
+                setLoader(false);
+                if (res.status === 200) {
+                    snackBar.show({
+                        open: true,
+                        type: "success",
+                        message: res.data.message,
+                    });
+                    props.history.push("/signin");
+                } else if (res.status === 400) {
+                    let err = "";
+                    for (const errorsKey in res.data.errors || {}) {
+                        err += res.data.errors[errorsKey] + "\n";
+                    }
+                    if (err) alert(err);
+                }
+            });
+        }
+    };
     const { register, handleSubmit, formState: { errors } } = useForm({
         mode: "onSubmit",
         resolver: yupResolver(schema),
     });
+
+
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-1 sm:mb-2">
