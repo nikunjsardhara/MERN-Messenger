@@ -6,7 +6,7 @@ const statusCheck = {
     validateStatus: (status) => {
         if (status === 401) {
             // remove token from local storage unAuthorize
-            localStorage.jwtToken = ''
+            localStorage.access = ''
             window.location.reload(true)
         } else if (status === 500) {
             alert('Could not connect to server')
@@ -44,9 +44,9 @@ const baseUrl = {
 }
 
 export const authService = {
-    signUp: (data) => api.post(baseUrl.auth + `signup`, data, statusCheck).then(onSuccess, onError),
-    signIn: (data) => api.post(baseUrl.auth + `signin`, data, statusCheck).then(onSuccess, onError),
-    signOut: (data) => api.post(baseUrl.auth + `signout`, data, statusCheck).then(onSuccess, onError),
+    signUp: (data) => api.post(baseUrl.auth + `register`, data, statusCheck).then(onSuccess, onError),
+    signIn: (data) => api.post(baseUrl.auth + `login`, data, statusCheck).then(onSuccess, onError),
+    signOut: (data) => api.post(baseUrl.auth + `logout`, data, statusCheck).then(onSuccess, onError),
 }
 
 export const messengerService = {

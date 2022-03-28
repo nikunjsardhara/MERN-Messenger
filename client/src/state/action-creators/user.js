@@ -1,5 +1,5 @@
 // eslint-disable-next-line
-import { SET_SIGNUP_USER, SET_SIGNIN_USER, SET_SIGNout_USER } from "../types";
+import { SET_SIGNUP_USER, SET_SIGNIN_USER, SET_SIGNOUT_USER } from "../types";
 import setAuthToken from "./../../setAuthToken";
 import { authService } from "../../service";
 export const setUser = (data) => {
@@ -19,9 +19,24 @@ export const logoutUser = () => dispatch => {
 };
 
 export function signUp(data, next) {
-    authService.signUp(data).then(response => {
-        if (next) next(response)
-    })
+    return (dispatch, getState) => {
+        authService.signUp(data).then(response => {
+            switch (response.status) {
+                case 200: {
+                    dispatch({ type: SET_SIGNUP_USER, payload: response.data });
+                    if (next) next(response)
+                    break
+                }
+                case 400: {
+                    if (next) next(response)
+                    break
+                }
+                default:
+                    break
+
+            }
+        })
+    }
 }
 
 
@@ -33,7 +48,6 @@ export function signIn(data, next) {
                     const { user, tokens } = response.data
                     if (user) {
                         dispatch({ type: SET_SIGNIN_USER, payload: user });
-                        dispatch({ type: 'SET_OTHER_USER_DETAIL', payload: jwt_decode(token).user });
                     }
                     if (next) next(response)
                     break

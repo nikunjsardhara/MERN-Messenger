@@ -3,21 +3,27 @@ import { SET_SIGNIN_USER, SET_SIGNOUT_USER, SET_USER_DETAIL } from "../types";
 import jwt_decode from "jwt-decode";
 // import isEmpty from "is-empty";
 const initialState = {
-    isAuthenticated: false,
-    data: localStorage.jwtToken ? jwt_decode(localStorage.jwtToken)?.user : {},
-    _id: localStorage.jwtToken ? jwt_decode(localStorage.jwtToken)?.user?._id : '',
-    user_type: ''
+    user: {},
+    access: localStorage.access ? localStorage.access : '',
+    refresh: localStorage.refresh ? localStorage.refresh : '',
 };
 
 const user = (state = initialState, action) => {
     switch (action.type) {
+        case SET_SIGNUP_USER: {
+            return {
+                ...state,
+                user: action.payload?.user,
+                access: action.payload?.access.token,
+                refresh: action.payload?.refresh.token,
+            };
+        }
         case SET_SIGNIN_USER: {
             return {
                 ...state,
-                _id: action.payload?.user?._id,
-                isAuthenticated: action.payload?.isAuthenticated,
-                data: action.payload?.user,
-                user_type: "user"
+                user: action.payload?.user,
+                access: action.payload?.access.token,
+                refresh: action.payload?.refresh.token,
             };
         }
         case SET_SIGNOUT_USER: {

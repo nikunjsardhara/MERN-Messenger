@@ -41,6 +41,11 @@ app.use(compression());
 app.use(cors());
 app.options('*', cors());
 
+// app.use(cors({
+//   origin: process.env.FRONTEND_BASE_URL,
+//   optionsSuccessStatus: 200
+// }));
+
 // jwt authentication
 app.use(passport.initialize());
 passport.use('jwt', jwtStrategy);
