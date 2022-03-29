@@ -1,5 +1,9 @@
 export const SIGNUP = "SIGNUP";
 export const SIGNIN = "SIGNIN";
+export const SET_USER = "SET_USER";
+export const SET_ACCESS_TOKEN = "SET_ACCESS_TOKEN";
+export const SET_REFRESH_TOKEN = "SET_REFRESH_TOKEN";
 export const SET_SIGNUP_USER = "SET_SIGNUP_USER";
 export const SET_SIGNIN_USER = "SET_SIGNIN_USER";
 export const SET_SIGNOUT_USER = "SET_SIGNOUT_USER";
+export const RESET_STATE = "RESET_STATE";

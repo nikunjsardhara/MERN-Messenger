@@ -1,7 +1,6 @@
 // eslint-disable-next-line
-import { SET_SIGNIN_USER, SET_SIGNOUT_USER, SET_USER_DETAIL } from "../types";
-import jwt_decode from "jwt-decode";
-// import isEmpty from "is-empty";
+import { SET_USER, SET_ACCESS_TOKEN, SET_REFRESH_TOKEN, RESET_STATE } from "../types";
+
 const initialState = {
     user: {},
     access: localStorage.access ? localStorage.access : '',
@@ -10,33 +9,27 @@ const initialState = {
 
 const user = (state = initialState, action) => {
     switch (action.type) {
-        case SET_SIGNUP_USER: {
+        case SET_USER: {
             return {
                 ...state,
-                user: action.payload?.user,
-                access: action.payload?.access.token,
-                refresh: action.payload?.refresh.token,
+                user: action.payload
             };
         }
-        case SET_SIGNIN_USER: {
+        case SET_ACCESS_TOKEN: {
+            localStorage.setItem('access', action.payload);
             return {
                 ...state,
-                user: action.payload?.user,
-                access: action.payload?.access.token,
-                refresh: action.payload?.refresh.token,
-            };
+                access: action.payload,
+            }
         }
-        case SET_SIGNOUT_USER: {
+        case SET_REFRESH_TOKEN: {
+            localStorage.setItem('refresh', action.payload);
             return {
                 ...state,
-                user_status: action.payload?.message,
-            };
+                refresh: action.payload,
+            }
         }
-        case SET_USER_DETAIL: {
-            const user = { ...state.data, ...action?.payload }
-            return { ...state, data: user, _id: user?._id }
-        }
-        case 'RESET_STATE': {
+        case RESET_STATE: {
             return initialState
         }
         default:

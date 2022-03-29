@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { Link } from 'react-router-dom';
 import { signUp } from "./../state/action-creators/user";
+import { useDispatch } from "react-redux";
+import Alert from "./Alert";
 const schema = yup.object({
     displayname: yup.string().required("Display Name is required"),
     email: yup.string().email("Email must be a valid email").required("Email is required"),
@@ -16,17 +19,22 @@ const schema = yup.object({
 
 const SignupForm = (props) => {
     const [loader, setLoader] = useState(false);
+    const [message, setMessage] = useState(false);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const onSubmit = (data) => {
         if (!loader) {
             setLoader(true);
-            signUp(data, (res) => {
+            dispatch(signUp(data, (res) => {
                 setLoader(false);
-                if (res.status === 200) {
-                    props.history.push("/signin");
+                if (res.status === 201) {
+                    setMessage(false);
+                    navigate("/signin", { replace: true, state: { message: "Please sign in to continue!" } });
                 } else if (res.status === 400) {
+                    setMessage(res.data.message);
                 }
-            });
+            }));
         }
     };
     const { register, handleSubmit, formState: { errors } } = useForm({
@@ -37,6 +45,11 @@ const SignupForm = (props) => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
+            {
+                message &&
+                <Alert Color="gray" Message={message} Show={() => { setMessage(false) }} />
+            }
+
             <div className="mb-1 sm:mb-2">
                 <label
                     htmlFor="displayname"
