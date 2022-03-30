@@ -2,7 +2,7 @@
 import { SET_USER, SET_ACCESS_TOKEN, SET_REFRESH_TOKEN, RESET_STATE } from "../types";
 
 const initialState = {
-    user: {},
+    user: localStorage.user ? JSON.parse(localStorage.user) : {},
     access: localStorage.access ? localStorage.access : '',
     refresh: localStorage.refresh ? localStorage.refresh : '',
 };
@@ -10,6 +10,7 @@ const initialState = {
 const user = (state = initialState, action) => {
     switch (action.type) {
         case SET_USER: {
+            localStorage.setItem('user', JSON.stringify(action.payload));
             return {
                 ...state,
                 user: action.payload
